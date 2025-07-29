@@ -5,7 +5,7 @@ const Chat = () => {
   return (
     <div>
       <Link to="/chat">
-        <button className="w-10 py-1 bg-blue-400 cursor-pointer text-white mx-auto">
+        <button className="w-36 py-3 rounded-xl bg-green-500 cursor-pointer text-white mx-auto">
           Chat
         </button>
       </Link>
