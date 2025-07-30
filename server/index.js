@@ -9,10 +9,11 @@ const connectdb = require("./config/db");
 const Messages = require("./models/messages");
 app.use(cors());
 
+
 const server = createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://realtime-ai-chatbot.vercel.app/",
   },
 });
 
