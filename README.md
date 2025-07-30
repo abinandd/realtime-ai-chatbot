@@ -10,15 +10,16 @@
 - Modern frontend built with React and Tailwind CSS
 - WebSocket-based client-server communication
 
-## Implementations 
 
--  Automated scrolling 
-- 
-
-## Performance Optimaztion 
-
-- 
-
-## How this works
 ## How to run 
-## Live preview 
+git clone https://github.com/abinandd/realtime-ai-chatbot
+
+### frontend
+cd client
+npm run start or npm run dev
+
+### backend 
+cd server 
+npm run start or nodemon index.js
+
+
