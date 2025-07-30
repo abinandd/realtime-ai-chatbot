@@ -3,7 +3,7 @@ import send from "../assets/send.svg";
 import { io } from "socket.io-client";
 import "../scroll.css"
 
-const socket = io("https://realtime-ai-chatbot.onrender.com");
+const socket = io("http://localhost:3000/");
 
 const ChatBox = () => {
   const [input, setInput] = useState("");
