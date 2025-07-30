@@ -13,7 +13,8 @@ app.use(cors());
 const server = createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: "https://realtime-ai-chatbot.vercel.app/",
+    origin: "*",
+    methods:["GET","POST"]
   },
 });
 
