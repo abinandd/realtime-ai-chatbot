@@ -1,70 +1,91 @@
-import React, { useState, useEffect } from "react";
-import Logo from "../assets/send-icon.png";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import send from "../assets/send.svg";
 import { io } from "socket.io-client";
+import "../scroll.css"
 
 const socket = io("http://localhost:3000");
 
 const ChatBox = () => {
   const [input, setInput] = useState("");
   const [chat, setChat] = useState([]);
-  // Listen for server messages
+
+  const bottom = useRef(null);
+
+  //automatic scrolling
+  useEffect(() => {
+    bottom.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
+
+  //  Handle socket messages
   useEffect(() => {
     socket.on("server", (data) => {
-      setChat((prevChat) => [...prevChat, { sender: "ai", text: data }]);
+      setChat(data);
     });
-    
+    // Cleanup
     return () => {
       socket.off("server");
     };
-  }, []);
+  }, [input]);
 
-  // Handle message send
+  //  Handle message send
   const handleMessage = (e) => {
     e.preventDefault();
     if (input.trim()) {
+      setChat((prevChat) => [...prevChat, { sender: "user", message: input }]);
       socket.emit("client", input);
-      setChat((prevChat) => [...prevChat, { sender: "user", text: input }]);
       setInput("");
     }
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-gray-200">
-      <div className="flex-1 border m-2 overflow-y-auto p-4 space-y-2 flex flex-col">
+    <div className="flex flex-col h-screen w-full bg-[#121317] px-0 md:px-30 lg:px-46 xl:px-88 ">
+      <div className="flex-1  m-2 overflow-y-auto p-4 space-y-2 flex flex-col scrollbar-custom">
         {chat.map((msg, index) => (
           <div
             key={index}
-            className={`p-3 rounded-xl shadow max-w-[75%] ${
+            className={`px-4 py-1 rounded-xl shadow max-w-[75%] ${
               msg.sender === "user"
-                ? "bg-blue-200 self-end text-right"
-                : "bg-white self-start text-left"
+                ? "bg-green-600 text-gray-100 self-end text-right"
+                : "bg-[#1E2020] text-white self-start text-left"
             }`}
           >
-            <span className="text-sm">
-              {msg.sender === "user" ? " You" : "AI"}
-            </span>
-            <div className="text-base">{msg.text}</div>
+            <div>{msg.message}</div>
+            <div
+              className={`text-xs xl:text-sm ${
+                msg.sender === "user" ? "text-gray-300" : "text-gray-200"
+              }`}
+            >
+              {msg?.timestamp
+                ? new Date(msg.timestamp).toLocaleTimeString("en-IN", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })
+                : "Just now"}
+            </div>
           </div>
         ))}
+        <div ref={bottom} />
       </div>
 
-      <div className="px-4 pb-6">
+      {/* input area */}
+      <div className="mx-4 mb-6">
         <form
-          className="flex items-center rounded-full pl-2 pr-1 py-1 bg-white"
+          className="flex items-center rounded-full p-2.5 pl-4 pr-2 border-white bg-[#1E2020]"
           onSubmit={handleMessage}
         >
           <input
             type="text"
-            className="flex-1 outline-none p-4"
+            className="flex-1 outline-none placeholder:text-[#B3B3B3] caret-green-500 text-[#E6E6E6]"
             placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <button
             type="submit"
-            className="px-2 py-1 rounded-full bg-gray-200 cursor-pointer"
+            className="rounded-full bg-gray-200 cursor-pointer"
           >
-            <img src={Logo} alt="send" />
+            <img className="w-7" src={send} alt="send" />
           </button>
         </form>
       </div>
