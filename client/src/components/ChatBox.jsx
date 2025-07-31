@@ -25,7 +25,7 @@ const ChatBox = () => {
     return () => {
       socket.off("server");
     };
-  }, [input]);
+  }, []);
 
   //  Handle message send
   const handleMessage = (e) => {
