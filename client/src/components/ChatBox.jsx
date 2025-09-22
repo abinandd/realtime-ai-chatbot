@@ -8,6 +8,7 @@ const socket = io("https://realtime-ai-chatbot.onrender.com");
 const ChatBox = () => {
   const [input, setInput] = useState("");
   const [chat, setChat] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const bottom = useRef(null);
 
@@ -20,6 +21,7 @@ const ChatBox = () => {
   useEffect(() => {
     socket.on("server", (data) => {
       setChat(data);
+      setLoading(false);
     });
     // Cleanup
     return () => {
@@ -33,6 +35,7 @@ const ChatBox = () => {
     if (input.trim()) {
       setChat((prevChat) => [...prevChat, { sender: "user", message: input }]);
       socket.emit("client", input);
+      setLoading(true);
       setInput("");
     }
   };
@@ -65,6 +68,13 @@ const ChatBox = () => {
             </div>
           </div>
         ))}
+        {loading && (
+          <div className="self-start text-left bouncing-dots bg-[#1E2020] px-4 py-2 rounded-xl shadow">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
         <div ref={bottom} />
       </div>
 
