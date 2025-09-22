@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import send from "../assets/send.svg";
 import { io } from "socket.io-client";
-import "../scroll.css"
 
 const socket = io("https://realtime-ai-chatbot.onrender.com");
 
@@ -42,7 +41,7 @@ const ChatBox = () => {
 
   return (
     <div className="flex flex-col h-screen w-full bg-[#121317] px-0 md:px-30 lg:px-46 xl:px-88 ">
-      <div className="flex-1  m-2 overflow-y-auto p-4 space-y-2 flex flex-col scrollbar-custom">
+      <div className="flex-1 m-2 p-4 space-y-2 flex flex-col overflow-hidden">
         {chat.map((msg, index) => (
           <div
             key={index}
